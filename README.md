@@ -3,15 +3,15 @@
 This is an example of how to send an order to ShopRunner SOAP API in Python
 
 # Setup
-This client requires Python 3 be installed.
+This client requires [Pipenv](https://pipenv.readthedocs.io/en/latest/) be installed
 
 Install Dependencies:
 ```
-pip install -r requirements.txt
+pipenv install
 ```
 
 # Send an order to the staging environment
 
 ```
-./send_test_order_to_staging.py <username> <password>
+pipenv run ./send_test_order_to_staging.py <username> <password>
 ```
