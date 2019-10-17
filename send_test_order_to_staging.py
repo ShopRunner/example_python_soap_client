@@ -56,3 +56,30 @@ results = client.service.Order(
     ])
 
 print(results)
+
+# See below for an example of sending an adjustment to an order (in this case, a return)
+
+# adjustment_type = client.get_type('ns0:Adjustment')
+# adjustment_results = client.service.Order(
+#     Partner="TESTPARTNER",
+#     Order=[
+#         order_type(
+#             OrderNumber="TEST100",
+#             OrderDate="2014-01-10T16:58:45",
+#             SRAuthenticationToken="037t4ufg820r3ge87rgf9r3x",
+#             CurrencyCode="USD",
+#             TotalNumberOfItems=2,
+#             TotalNumberOfShopRunnerItems=2,
+#             OrderTax=0.0,
+#             OrderTotal=205.68,
+#             Adjustment=adjustment_type(
+#                            AdjustmentId=12345678,
+#                            AdjustmentAmount=-100.00,
+#                            BillingAdjustmentAmount=-100.00,
+#                            AdjustmentType="RETURN"
+#                        )
+#         ),
+#
+#     ])
+#
+# print(adjustment_results)
