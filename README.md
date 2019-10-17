@@ -15,3 +15,9 @@ pipenv install
 ```
 pipenv run ./send_test_order_to_staging.py <username> <password>
 ```
+
+# Send an order adjustment to the staging environment
+
+```
+pipenv run ./send_test_order_adjustment_to_staging.py <username> <password>
+```
