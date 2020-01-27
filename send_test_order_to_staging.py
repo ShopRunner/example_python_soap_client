@@ -2,6 +2,7 @@
 import argparse
 from zeep import Client
 from zeep.wsse.username import UsernameToken
+from freezegun import freeze_time
 import logging.config
 
 logging.config.dictConfig({
@@ -33,26 +34,34 @@ parser.add_argument('password', help='ShopRunner Staging Password')
 
 args = parser.parse_args()
 
-wsdl_url = 'https://services.shoprunner.com/staging/services/order?wsdl'
+wsdl_url = 'http://localhost:8080/services/order?wsdl'
+
 client = Client(
     wsdl_url,
     wsse=UsernameToken(args.username, args.password, use_digest=True))
 
 order_request_type = client.get_type('ns0:OrderRequestType')
 order_type = client.get_type('ns0:Order')
+order_token = client.get_type('ns0:OrderToken')
 
-results = client.service.Order(
-    Partner="TESTPARTNER",
-    Order=[
-        order_type(
-            OrderNumber="TEST100",
-            OrderDate="2014-01-10T16:58:45",
-            SRAuthenticationToken="037t4ufg820r3ge87rgf9r3x",
-            CurrencyCode="USD",
-            TotalNumberOfItems=1,
-            TotalNumberOfShopRunnerItems=1,
-            OrderTax=0.0,
-            OrderTotal=205.68)
-    ])
+print(order_token)
 
-print(results)
+@freeze_time("2012-01-14")
+def sendOrder():
+    results = client.service.Order(
+        Partner="SRCANARYTEST",
+        Order=[
+            order_type(
+                OrderNumber="TEST100",
+                OrderDate="2014-01-10T16:58:45",
+                SRAuthenticationToken="037t4ufg820r3ge87rgf9r3x",
+                CurrencyCode="USD",
+                TotalNumberOfItems=1,
+                TotalNumberOfShopRunnerItems=1,
+                OrderTax=0.0,
+                OrderToken = [order_token(TokenType="sameday", TokenValue="abcdef")],
+                OrderTotal=205.68)
+        ])
+    print(results)
+
+sendOrder()
