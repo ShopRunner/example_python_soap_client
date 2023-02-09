@@ -35,7 +35,7 @@ parser.add_argument('password', help='ShopRunner Staging Password')
 
 args = parser.parse_args()
 
-url = 'https://services.shoprunner.com/staging/services' if args.env == 'stg' else 'https://orderservices.stg.shoprunner.io'
+url = 'https://orderservices.wip.shoprunner.io' if args.env == 'stg' else 'https://orderservices.stg.shoprunner.io'
 wsdl_url = url + "/services/order?wsdl"
 client = Client(
     wsdl_url,
