@@ -28,12 +28,15 @@ logging.config.dictConfig({
 })
 
 parser = argparse.ArgumentParser(description='ShopRunner SOAP Example')
+parser.add_argument('env', help='Environment: wip or stg', choices=['wip', 'stg'])
+parser.add_argument('orderid', help='Retailer Order Number')
 parser.add_argument('username', help='ShopRunner Staging Username')
 parser.add_argument('password', help='ShopRunner Staging Password')
 
 args = parser.parse_args()
 
-wsdl_url = 'https://services.shoprunner.com/staging/services/shipment?wsdl'
+url = 'https://orderservices.stg.shoprunner.io' if args.env == 'stg' else 'https://orderservices.wip.shoprunner.io'
+wsdl_url = url + '/services/shipment?wsdl'
 client = Client(
     wsdl_url,
     wsse=UsernameToken(args.username, args.password, use_digest=True))
@@ -42,10 +45,10 @@ shipment_request_type = client.get_type('ns0:ShipmentRequestType')
 shipment_type = client.get_type('ns0:Shipment')
 
 results = client.service.Shipment(
-    Partner="BLOOM",
+    Partner="SRCANARYTEST",
     Shipment=[
         shipment_type(
-            RetailerOrderNumber="TEST100",
+            RetailerOrderNumber=args.orderid,
             CarrierCode="UPS",
             TrackingNumber="someTrackingNumber",
             NumberOfItems=1,
@@ -56,4 +59,8 @@ results = client.service.Shipment(
             ShipmentWeight="10")
     ])
 
+print('----')
+print(wsdl_url)
 print(results)
+
+
